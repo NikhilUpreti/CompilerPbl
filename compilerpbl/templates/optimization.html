@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Code Optimization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff0f0;
+            margin: 0;
+            padding: 0;
+            color: #900000;
+        }
+        header {
+            background: linear-gradient(to right, #cc0000, #990000);
+            padding: 20px 40px;
+            text-align: center;
+        }
+        header h1 {
+            color: white;
+            font-weight: 800;
+            margin: 0;
+            font-size: 38px;
+        }
+        header p {
+            color: black;
+            font-weight: 900;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+        main {
+            max-width: 950px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(153, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+        h2 {
+            color: #b30000;
+            margin-top: 40px;
+        }
+        p, ul {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #660000;
+        }
+        ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        code {
+            background: #ffe6e6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #b30000;
+        }
+        pre {
+            background: #fff0f0;
+            padding: 15px;
+            border-left: 6px solid #b30000;
+            font-size: 16px;
+            overflow-x: auto;
+            border-radius: 6px;
+            color: #660000;
+        }
+        footer {
+            background: #990000;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Code Optimization</h1>
+        <p>Making your code faster, smaller, and smarter</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>📘 What is Code Optimization?</h2>
+            <p>
+                Code Optimization is a phase in compiler design that transforms intermediate code into a more efficient version.
+                It reduces runtime, memory usage, or both — without changing the output of the program. It helps in building
+                fast, reliable, and resource-friendly applications.
+            </p>
+        </section>
+
+        <section>
+            <h2>🎯 Objectives of Code Optimization</h2>
+            <ul>
+                <li>Enhance program performance and speed</li>
+                <li>Reduce memory footprint</li>
+                <li>Improve battery and resource efficiency</li>
+                <li>Ensure optimized code behaves the same as original code</li>
+                <li>Facilitate better use of CPU cycles and cache</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🧠 Types of Code Optimization</h2>
+            <h3>1. Local Optimization</h3>
+            <p>Focuses on a single basic block (a straight-line code segment with no branches):</p>
+            <ul>
+                <li><strong>Constant Folding:</strong> Compile-time computation of constants. <br> <code>x = 3 + 4</code> → <code>x = 7</code></li>
+                <li><strong>Strength Reduction:</strong> Replaces expensive operations with cheaper ones. <br> <code>x = y * 2</code> → <code>x = y + y</code></li>
+                <li><strong>Dead Code Elimination:</strong> Removes code that doesn't affect output. <br> <code>int x = 5;</code> if <code>x</code> is never used</li>
+            </ul>
+
+            <h3>2. Global Optimization</h3>
+            <p>Optimizations across basic blocks or entire function:</p>
+            <ul>
+                <li><strong>Loop Invariant Code Motion:</strong> Moves expressions out of loops if they produce same result every iteration</li>
+                <li><strong>Common Subexpression Elimination:</strong> Prevents re-evaluation of same expression<br> <code>a = b + c; d = b + c;</code> → reuse result</li>
+                <li><strong>Copy Propagation:</strong> Replace variables holding other variables <br> <code>x = y;</code> and later <code>z = x;</code> → <code>z = y;</code></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>📐 Example of Optimized Code</h2>
+            <p>Original Intermediate Code:</p>
+            <pre>
+t1 = a * 8
+t2 = a * 8
+t3 = t1 + t2</pre>
+            <p>After Optimization:</p>
+            <pre>
+t1 = a * 8
+t3 = t1 + t1</pre>
+        </section>
+
+        <section>
+            <h2>🚀 Benefits of Code Optimization</h2>
+            <ul>
+                <li>Increases efficiency and speed of the final program</li>
+                <li>Reduces cost for embedded or IoT systems</li>
+                <li>Improves responsiveness and battery life in mobile applications</li>
+                <li>Essential for high-performance computing and game development</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🛠️ Optimization Techniques</h2>
+            <ul>
+                <li><strong>Peephole Optimization:</strong> Looks at small windows (peepholes) of code to make localized improvements</li>
+                <li><strong>Inlining:</strong> Replaces function calls with actual function body to reduce overhead</li>
+                <li><strong>Tail Recursion Elimination:</strong> Replaces recursive calls with jumps</li>
+                <li><strong>Loop Unrolling:</strong> Reduces overhead of looping structures by repeating body</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🧩 Machine-Independent vs Machine-Dependent Optimization</h2>
+            <p>
+                <strong>Machine-Independent:</strong> Performed regardless of hardware (e.g., constant folding, common subexpression elimination)<br>
+                <strong>Machine-Dependent:</strong> Takes hardware into account (e.g., instruction scheduling, register allocation)
+            </p>
+        </section>
+
+        <section>
+            <h2>🧪 Tools That Perform Optimization</h2>
+            <ul>
+                <li><strong>LLVM:</strong> Open-source infrastructure for building compilers with advanced optimizations</li>
+                <li><strong>GCC:</strong> GNU Compiler Collection supports multiple optimization levels (-O1, -O2, -O3)</li>
+                <li><strong>Clang:</strong> Part of LLVM, offers extensive optimization with clean diagnostics</li>
+                <li><strong>Java JIT:</strong> Just-In-Time compiler in Java optimizes code at runtime</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🎓 Summary</h2>
+            <p>
+                Code Optimization is not about changing what the program does — it's about making it do the same thing better. It involves applying systematic techniques to make code faster, shorter, and more efficient. Whether it's a small embedded device or a massive server application, optimization makes a big difference in software quality.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        Made by FOUR LOOPS &copy; 2025
+    </footer>
+</body>
+</html>

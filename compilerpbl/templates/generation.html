@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Code Generation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff0f0;
+            margin: 0;
+            padding: 0;
+            color: #900000;
+        }
+        header {
+            background: linear-gradient(to right, #cc0000, #990000);
+            padding: 20px 40px;
+            text-align: center;
+        }
+        header h1 {
+            color: white;
+            font-weight: 800;
+            margin: 0;
+            font-size: 38px;
+        }
+        header p {
+            color: black;
+            font-weight: 900;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+        main {
+            max-width: 950px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(153, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+        h2 {
+            color: #b30000;
+            margin-top: 40px;
+        }
+        p, ul {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #660000;
+        }
+        ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        code {
+            background: #ffe6e6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #b30000;
+        }
+        pre {
+            background: #fff0f0;
+            padding: 15px;
+            border-left: 6px solid #b30000;
+            font-size: 16px;
+            overflow-x: auto;
+            border-radius: 6px;
+            color: #660000;
+        }
+        footer {
+            background: #990000;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Code Generation</h1>
+        <p>Turning Intermediate Code into Target Machine Code</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>📘 What is Code Generation?</h2>
+            <p>
+                Code Generation is the final phase of a compiler. It takes the optimized intermediate representation (IR) of a program and translates it into the final machine-level or assembly code, which can be directly executed by the hardware or further assembled and linked.
+            </p>
+        </section>
+
+        <section>
+            <h2>🎯 Purpose of Code Generation</h2>
+            <ul>
+                <li>Convert IR to target language (assembly or machine code)</li>
+                <li>Allocate machine resources efficiently (registers, memory)</li>
+                <li>Preserve the semantics of the original program</li>
+                <li>Generate fast and compact code</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🧠 Input and Output</h2>
+            <ul>
+                <li><strong>Input:</strong> Intermediate Code (e.g., Three-Address Code)</li>
+                <li><strong>Output:</strong> Target Code (e.g., Assembly/Machine Code)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>⚙️ Activities in Code Generation</h2>
+            <ul>
+                <li><strong>Instruction Selection:</strong> Choosing appropriate machine instructions</li>
+                <li><strong>Register Allocation:</strong> Assigning variables to machine registers efficiently</li>
+                <li><strong>Instruction Scheduling:</strong> Reordering instructions to avoid pipeline stalls and delays</li>
+                <li><strong>Address and Offset Calculation:</strong> Computing memory addresses and stack offsets</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>📐 Example</h2>
+            <p><strong>Intermediate Code:</strong></p>
+            <pre>
+t1 = a + b
+t2 = t1 * c
+d = t2</pre>
+            <p><strong>Target Code (x86-like Assembly):</strong></p>
+            <pre>
+MOV R1, a
+ADD R1, b
+MUL R1, c
+MOV d, R1</pre>
+        </section>
+
+        <section>
+            <h2>🔍 Register Allocation</h2>
+            <p>
+                Efficient use of a limited number of CPU registers is essential for fast code. Techniques like <strong>graph coloring</strong> and <strong>live variable analysis</strong> are used to minimize memory loads/stores and maximize register reuse.
+            </p>
+        </section>
+
+        <section>
+            <h2>🧩 Code Generator Design Issues</h2>
+            <ul>
+                <li>Instruction Set of the target machine (RISC vs CISC)</li>
+                <li>Number of available registers</li>
+                <li>Calling conventions and stack layout</li>
+                <li>Performance vs code size trade-offs</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🛠️ Tools and Technologies</h2>
+            <ul>
+                <li><strong>LLVM:</strong> Open-source compiler framework capable of generating native code</li>
+                <li><strong>GCC:</strong> GNU Compiler Collection for various languages and architectures</li>
+                <li><strong>Assembler:</strong> Converts assembly code into machine code (e.g., NASM, GAS)</li>
+                <li><strong>JVM/CLR:</strong> Platforms that generate bytecode for virtual machines</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🚀 Summary</h2>
+            <p>
+                Code Generation is a crucial stage in compiler construction. It bridges the gap between high-level source code and low-level machine instructions. A good code generator ensures that the final output is not only correct but also efficient and optimized for the specific hardware it targets.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        Made by FOUR LOOPS &copy; 2025
+    </footer>
+</body>
+</html>

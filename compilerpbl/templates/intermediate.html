@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Intermediate Code Generation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff0f0;
+            margin: 0;
+            padding: 0;
+            color: #900000;
+        }
+        header {
+            background: linear-gradient(to right, #cc0000, #990000);
+            padding: 20px 40px;
+            text-align: center;
+        }
+        header h1 {
+            color: white;
+            font-weight: 800;
+            margin: 0;
+            font-size: 38px;
+        }
+        header p {
+            color: black;
+            font-weight: 900;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(153, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+        h2 {
+            color: #b30000;
+            margin-top: 40px;
+        }
+        p, ul {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #660000;
+        }
+        ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        code {
+            background: #ffe6e6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #b30000;
+        }
+        pre {
+            background: #fff0f0;
+            padding: 15px;
+            border-left: 6px solid #b30000;
+            font-size: 16px;
+            overflow-x: auto;
+            border-radius: 6px;
+            color: #660000;
+        }
+        footer {
+            background: #990000;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 50px;
+        }
+
+        #icgdiv {
+            margin-top: 50px;
+            padding: 20px;
+            border: 2px solid #cc0000;
+            border-radius: 12px;
+            background: #fff5f5;
+            color: #660000;
+            text-align: center;
+        }
+        #icgdiv h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #b30000;
+        }
+        #expr {
+            width: 80%;
+            font-family: monospace;
+            font-size: 16px;
+            padding: 10px;
+            border: 1.5px solid #b30000;
+            border-radius: 6px;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #cc0000;
+            border: none;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #990000;
+        }
+        #icgresult {
+            margin-top: 20px;
+            color: #900000;
+            font-weight: bold;
+            min-height: 40px;
+        }
+    </style>
+    <script>
+        function generateICG() {
+            const input = document.getElementById('expr').value.trim();
+            const result = document.getElementById('icgresult');
+
+            if (!input) {
+                result.textContent = "Please enter an arithmetic expression!";
+                return;
+            }
+
+            // Simple postfix and three-address simulation
+            try {
+                let output = [];
+                let stack = [];
+                let tempCount = 1;
+                const tokens = input.match(/\w+|[+\-*/()]/g);
+                const precedence = {'+': 1, '-': 1, '*': 2, '/': 2};
+
+                let postfix = [];
+                let opStack = [];
+
+                tokens.forEach(token => {
+                    if (/\w+/.test(token)) {
+                        postfix.push(token);
+                    } else if (token === '(') {
+                        opStack.push(token);
+                    } else if (token === ')') {
+                        while (opStack.length && opStack[opStack.length - 1] !== '(') {
+                            postfix.push(opStack.pop());
+                        }
+                        opStack.pop();
+                    } else {
+                        while (opStack.length && precedence[opStack[opStack.length - 1]] >= precedence[token]) {
+                            postfix.push(opStack.pop());
+                        }
+                        opStack.push(token);
+                    }
+                });
+
+                while (opStack.length) {
+                    postfix.push(opStack.pop());
+                }
+
+                postfix.forEach(token => {
+                    if (/\w+/.test(token)) {
+                        stack.push(token);
+                    } else {
+                        const b = stack.pop();
+                        const a = stack.pop();
+                        const temp = `t${tempCount++}`;
+                        output.push(`${temp} = ${a} ${token} ${b}`);
+                        stack.push(temp);
+                    }
+                });
+
+                result.textContent = output.join('\n');
+            } catch (e) {
+                result.textContent = "Error in generating intermediate code.";
+            }
+        }
+
+        function resetICG() {
+            document.getElementById('expr').value = '';
+            document.getElementById('icgresult').textContent = '';
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>Intermediate Code Generation</h1>
+        <p>Bridge between high-level code and machine-level code</p>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>📌 What is Intermediate Code Generation?</h2>
+            <p>
+                Intermediate Code Generation (ICG) is a crucial phase in the compiler where the source code is translated into an intermediate form
+                that is easier to analyze and optimize before converting it to machine code.
+            </p>
+            <p>
+                This form is independent of the target machine and allows the compiler to focus on correctness and optimization first.
+            </p>
+        </section>
+
+        <section>
+            <h2>🎯 Objectives of ICG</h2>
+            <ul>
+                <li>Generate a machine-independent representation of the code</li>
+                <li>Enable easier optimization before final code generation</li>
+                <li>Simplify complex expressions into simpler parts using temporaries</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🛠️ Common Forms of Intermediate Code</h2>
+            <ul>
+                <li><strong>Three-Address Code (TAC):</strong> Breaks expressions into simple statements using at most three operands</li>
+                <li><strong>Postfix Notation:</strong> Also called Reverse Polish Notation</li>
+                <li><strong>Quadruples & Triples:</strong> Represent operations with tuples</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>📐 Example</h2>
+            <p>Expression: <code>a + b * c</code></p>
+            <p>Postfix: <code>a b c * +</code></p>
+            <p>Three Address Code:</p>
+            <pre>
+t1 = b * c
+t2 = a + t1
+            </pre>
+        </section>
+
+        <section>
+            <h2>🚀 Benefits of Using Intermediate Code</h2>
+            <ul>
+                <li>Supports portability across platforms</li>
+                <li>Makes optimization independent of machine architecture</li>
+                <li>Improves modularity and maintainability of compiler</li>
+            </ul>
+        </section>
+
+        <!-- Interactive ICG Section -->
+        <section id="icgdiv">
+            <h1>Try Generating Intermediate Code!</h1>
+            <textarea id="expr" rows="4" placeholder="Enter expression like a + b * c"></textarea><br />
+            <button onclick="generateICG()">Generate</button>
+            <button onclick="resetICG()">RESET</button>
+            <pre id="icgresult"></pre>
+        </section>
+
+    </main>
+
+    <footer>
+        Made by FOUR LOOPS &copy; 2025
+    </footer>
+
+</body>
+</html>

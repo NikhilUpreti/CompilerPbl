@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Semantic Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff0f0;
+            margin: 0;
+            padding: 0;
+            color: #900000;
+        }
+        header {
+            background: linear-gradient(to right, #cc0000, #990000);
+            padding: 20px 40px;
+            text-align: center;
+        }
+        header h1 {
+            color: white;
+            font-weight: 800;
+            margin: 0;
+            font-size: 38px;
+        }
+        header p {
+            color: black;
+            font-weight: 900;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(153, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+        h2 {
+            color: #b30000;
+            margin-top: 40px;
+        }
+        p, ul {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #660000;
+        }
+        ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        code {
+            background: #ffe6e6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #b30000;
+        }
+        pre {
+            background: #fff0f0;
+            padding: 15px;
+            border-left: 6px solid #b30000;
+            font-size: 16px;
+            overflow-x: auto;
+            border-radius: 6px;
+            color: #660000;
+        }
+        footer {
+            background: #990000;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 50px;
+        }
+
+        #semanticdiv {
+            margin-top: 50px;
+            padding: 20px;
+            border: 2px solid #cc0000;
+            border-radius: 12px;
+            background: #fff5f5;
+            color: #660000;
+            text-align: center;
+        }
+        #semanticdiv h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #b30000;
+        }
+        #statement {
+            width: 80%;
+            font-family: monospace;
+            font-size: 16px;
+            padding: 10px;
+            border: 1.5px solid #b30000;
+            border-radius: 6px;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #cc0000;
+            border: none;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #990000;
+        }
+        #semresult {
+            margin-top: 20px;
+            color: #900000;
+            font-weight: bold;
+            min-height: 40px;
+        }
+    </style>
+    <script>
+        function analyzeSemantics() {
+            const input = document.getElementById('statement').value.trim();
+            const result = document.getElementById('semresult');
+
+            if (!input) {
+                result.textContent = "Please enter a code statement!";
+                return;
+            }
+
+            let declaredVars = new Set();
+            let lines = input.split(';');
+            let errors = [];
+
+            lines.forEach(line => {
+                line = line.trim();
+                if (!line) return;
+
+                let declarationMatch = line.match(/^int\s+(\w+)\s*=\s*([^;]+)$/);
+                if (declarationMatch) {
+                    const varName = declarationMatch[1];
+                    const value = declarationMatch[2].trim();
+                    declaredVars.add(varName);
+                    if (isNaN(value)) {
+                        errors.push(`Type mismatch: Cannot assign '${value}' to int variable '${varName}'`);
+                    }
+                    return;
+                }
+
+                let simpleDeclaration = line.match(/^int\s+(\w+)$/);
+                if (simpleDeclaration) {
+                    declaredVars.add(simpleDeclaration[1]);
+                    return;
+                }
+
+                let assignmentMatch = line.match(/^(\w+)\s*=\s*(.+)$/);
+                if (assignmentMatch) {
+                    const varName = assignmentMatch[1];
+                    const value = assignmentMatch[2].trim();
+
+                    if (!declaredVars.has(varName)) {
+                        errors.push(`Undeclared variable '${varName}' used`);
+                    } else if (isNaN(value)) {
+                        errors.push(`Type mismatch: Cannot assign '${value}' to int variable '${varName}'`);
+                    }
+                    return;
+                }
+
+                errors.push(`Unrecognized or invalid statement: '${line}'`);
+            });
+
+            if (errors.length === 0) {
+                result.textContent = "✔️ All statements are semantically correct!";
+            } else {
+                result.textContent = "❌ Semantic Issues:\n" + errors.join("\n");
+            }
+        }
+
+        function clearSemantics() {
+            document.getElementById('statement').value = '';
+            document.getElementById('semresult').textContent = '';
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>Semantic Analysis</h1>
+        <p>Understanding the meaning behind code statements</p>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>📌 What is Semantic Analysis?</h2>
+            <p>Semantic Analysis is the third phase of a compiler. It checks if your program makes logical sense and follows the language's rules, even if the syntax is correct.</p>
+            <p>For example, assigning a string to an integer variable (<code>int x = "hello";</code>) is syntactically correct but semantically wrong.</p>
+        </section>
+
+        <section>
+            <h2>🎯 Goals of Semantic Analysis</h2>
+            <ul>
+                <li>Ensure variables are declared before use.</li>
+                <li>Check type compatibility in assignments and expressions.</li>
+                <li>Verify function calls use the right number and type of arguments.</li>
+                <li>Enforce scope rules and manage symbol tables.</li>
+                <li>Detect logical errors before code generation.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>📚 Examples of Semantic Errors</h2>
+            <pre>
+int x = 5;       // ✔️ correct
+x = "hello";     // ❌ type mismatch
+b = 10;          // ❌ 'b' is not declared
+int 9abc = 1;    // ❌ invalid variable name
+int y; y = 10;   // ✔️ valid usage
+            </pre>
+        </section>
+
+        <section>
+            <h2>🔧 What Happens During Semantic Analysis?</h2>
+            <ul>
+                <li><strong>Symbol Table Creation:</strong> Maintains list of all declared variables/functions.</li>
+                <li><strong>Type Checking:</strong> Ensures operations are performed on compatible types.</li>
+                <li><strong>Scope Resolution:</strong> Ensures variables are accessed within correct block/scope.</li>
+                <li><strong>Return Type Checking:</strong> Ensures functions return the expected type.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🧠 Why is Semantic Analysis Important?</h2>
+            <p>
+                It helps prevent logical bugs, improves reliability, and ensures the source code is safe to convert to lower-level representations like intermediate code or assembly. It acts as the compiler's brain, making sure the program is meaningful.
+            </p>
+        </section>
+
+        <!-- Interactive Semantic Analysis -->
+        <section id="semanticdiv">
+            <h1>Try Semantic Checking Below!</h1>
+            <textarea id="statement" rows="6" placeholder="Enter your code (e.g. int x = 10; x = 5;)"></textarea><br />
+            <button onclick="analyzeSemantics()">Check Semantics</button>
+            <button onclick="clearSemantics()">RESET</button>
+            <pre id="semresult"></pre>
+        </section>
+
+    </main>
+
+    <footer>
+        Made by FOUR LOOPS &copy; 2025
+    </footer>
+
+</body>
+</html>
